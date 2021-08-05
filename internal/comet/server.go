@@ -82,7 +82,7 @@ func newLogicClient(c *conf.RPCClient) logic.LogicClient {
 	if err!= nil {
 		panic(err)
 	}
-	conn, err := grpc.DialContext(ctx, "127.0.0.1:9001",
+	conn, err := grpc.DialContext(ctx, "172.17.0.11:9001",
 		[]grpc.DialOption{
 			grpc.WithInsecure(),
 			grpc.WithResolvers(etcdResolver),
