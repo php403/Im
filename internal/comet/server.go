@@ -7,8 +7,6 @@ import (
 	"github.com/php403/im/api/protocol"
 	"github.com/php403/im/internal/comet/conf"
 	"github.com/php403/im/pkg/log"
-	clientv3 "go.etcd.io/etcd/client/v3"
-	"go.etcd.io/etcd/client/v3/naming/resolver"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"math/rand"
@@ -66,7 +64,7 @@ func NewServer(c *conf.Config,logger log.Logger) *Server {
 func newLogicClient(c *conf.RPCClient) logic.LogicClient {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(time.Second*10))
 	defer cancel()
-	config := clientv3.Config{
+	/*config := clientv3.Config{
 		Endpoints:[]string{"127.0.0.1:2379"},
 		DialTimeout:10*time.Second,
 	}
@@ -81,11 +79,11 @@ func newLogicClient(c *conf.RPCClient) logic.LogicClient {
 	etcdResolver, err := resolver.NewBuilder(cli)
 	if err!= nil {
 		panic(err)
-	}
+	}*/
 	conn, err := grpc.DialContext(ctx, "172.17.0.11:9001",
 		[]grpc.DialOption{
 			grpc.WithInsecure(),
-			grpc.WithResolvers(etcdResolver),
+			//grpc.WithResolvers(etcdResolver),
 			grpc.WithInitialWindowSize(grpcInitialWindowSize),
 			grpc.WithInitialConnWindowSize(grpcInitialConnWindowSize),
 			grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(grpcMaxCallMsgSize)),
