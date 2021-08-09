@@ -83,10 +83,10 @@ func (s *Server) ServeTCP(conn *net.TCPConn, r int) {
 	//todo 改环形buf存储 用完回收 或者sync.pool实现 减少gc
 	p := &protocol.Proto{}
 	p.Ver = 1
-	p.Op = protocol.OpClosetReply
 	userInfo,err := s.authTCP(ctx, user.Reader, user.Writer, p)
 	if err != nil {
 		//todo 添加im全局错误码
+		p.Op = protocol.OpClosetReply
 		p.Body = []byte("auth error!")
 		s.log.Errorf("Auth err! %V",err.Error())
 		_ = p.WriteTCP(user.Writer)
@@ -94,6 +94,7 @@ func (s *Server) ServeTCP(conn *net.TCPConn, r int) {
 		return
 	}
 	atomic.AddInt64(&s.AllUser,1)
+	p.Op = protocol.OpAuthReply
 	p.Body = []byte("success")
 	err = p.WriteTCP(user.Writer)
 	if err != nil {
