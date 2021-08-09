@@ -46,6 +46,7 @@ type Proto struct {
 var (
 	countDown  int64
 	aliveCount int64
+	sendCount int64
 )
 
 
@@ -139,6 +140,7 @@ func startClient(ctx context.Context,uid int64) {
 					glog.Errorf("key:%d tcpWriteProto() error(%v)", err.Error())
 					return
 				}
+				atomic.AddInt64(&sendCount,1)
 				time.Sleep(time.Millisecond*200)
 			}
 		}
@@ -170,9 +172,10 @@ func result() {
 	for {
 		nowCount := atomic.LoadInt64(&countDown)
 		nowAlive := atomic.LoadInt64(&aliveCount)
+		newSend := atomic.LoadInt64(&sendCount)
 		diff := nowCount - lastTimes
 		lastTimes = nowCount
-		fmt.Println(fmt.Sprintf("%s alive:%d down:%d down/s:%d", time.Now().Format("2006-01-02 15:04:05"), nowAlive, nowCount, diff/interval))
+		fmt.Println(fmt.Sprintf("%s alive:%d down:%d send:%d down/s:%d", time.Now().Format("2006-01-02 15:04:05"), nowAlive, nowCount,newSend, diff/interval))
 		time.Sleep(time.Second * time.Duration(interval))
 	}
 }
