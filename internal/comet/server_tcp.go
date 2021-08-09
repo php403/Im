@@ -123,6 +123,8 @@ func (s *Server) ServeTCP(conn *net.TCPConn, r int) {
 			if now := time.Now(); now.Sub(lastHb) > serverHeartbeat {
 				lastHb = now
 			}
+			p.Op = protocol.OpHeartbeat
+			_ = p.WriteTCP(user.Writer)
 		} else {
 			if err = s.Operate(ctx, p, user, b); err != nil {
 				break
