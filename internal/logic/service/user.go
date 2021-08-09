@@ -46,6 +46,41 @@ func (s *UserService) Auth(c *gin.Context)  {
 	return
 }
 
+func (s *UserService) Room(c *gin.Context)  {
+	param := &UserRequest{}
+	err := c.ShouldBind(param)
+	if err != nil {
+		s.log.Log(log.LevelError,"logic","auth bind param err!")
+		app.Errors(c,log.InvalidParams)
+		return
+	}
+	token,err := s.user.Auth(context.Background(), param.UniqueKey)
+	if err != nil {
+		s.log.Log(log.LevelError,"logic","token err!")
+		app.Errors(c,log.ServerError)
+	}
+	app.Result(c,map[string]string{"token":token},app.OK)
+	return
+}
+
+func (s *UserService) Broadcast(c *gin.Context)  {
+	param := &UserRequest{}
+	err := c.ShouldBind(param)
+	if err != nil {
+		s.log.Log(log.LevelError,"logic","auth bind param err!")
+		app.Errors(c,log.InvalidParams)
+		return
+	}
+	token,err := s.user.Auth(context.Background(), param.UniqueKey)
+	if err != nil {
+		s.log.Log(log.LevelError,"logic","token err!")
+		app.Errors(c,log.ServerError)
+	}
+	app.Result(c,map[string]string{"token":token},app.OK)
+	return
+}
+
+
 
 
 /*//todo server name

@@ -57,7 +57,7 @@ func Default() *Config {
 				ReadTimeout:time.Second,
 			},
 			Nsq:&Nsq{
-				Addr:"172.17.0.16:4150",
+				Addr:"172.18.180.81:4150",
 			},
 		},
 	}

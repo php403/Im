@@ -30,6 +30,8 @@ func NewRouter(service *service.UserService) *gin.Engine {
 	api := r.Group("api")
 	{
 		api.POST("/auth",service.Auth)
+		api.POST("/room",service.Room)
+		api.POST("/broad",service.Auth)
 	}
 	return r
 }
